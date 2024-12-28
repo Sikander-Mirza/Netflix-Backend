@@ -1,8 +1,19 @@
 import express from 'express';
+import connectDB from './src/infrastructure/db.mjs';
 
 const app = express();
 const port = 3000;
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+connectDB().then(()=>{
+    console.log("DataBase Connected")
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
+})
+.catch(()=>{
+    console.log("DataBase Connection Failed")
+})
+
+app.get("/",(req,res)=>{
+res.send("hello world")
+})
