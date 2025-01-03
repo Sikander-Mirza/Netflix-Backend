@@ -2,7 +2,7 @@ import express from 'express';
 import connectDB from './src/infrastructure/db.mjs';
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
 connectDB().then(()=>{
     console.log("DataBase Connected")
