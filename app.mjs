@@ -1,20 +1,29 @@
-import express from 'express';
-import connectDB from './src/infrastructure/db.mjs';
+import express from "express";
+import connectDB from "./src/infrastructure/db.mjs";
+import SignupRoutes from "./src/routes/SignupRoute.mjs";
 
 const app = express();
 const port = 4000;
 
-connectDB().then(()=>{
-    console.log("DataBase Connected")
-    app.listen(port, () => {
-        console.log(`Server is running on port ${port}`);
-    });
-})
-.catch(()=>{
-    console.log("DataBase Connection Failed")
-})
+// Middleware for parsing JSON
+app.use(express.json());
 
-app.get("/",(req,res)=>{
-res.send("hello world")
-})
-//hello world
+// Initialize Routes
+SignupRoutes(app);
+
+// Database Connection and Server Start
+connectDB()
+    .then(() => {
+        console.log("Database Connected");
+        app.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
+        });
+    })
+    .catch((err) => {
+        console.error("Database Connection Failed:", err.message);
+    });
+
+// Default Route
+app.get("/", (req, res) => {
+    res.send("Hello World");
+});
