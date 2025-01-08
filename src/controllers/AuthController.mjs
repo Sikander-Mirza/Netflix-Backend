@@ -1,6 +1,8 @@
 import AuthModel from "../models/SignupModel.mjs";
+import jwt from "jsonwebtoken";
 
-const Signin = async (req, res) => {
+const auth={
+Signin : async (req, res) => {
     const data = req.body;
 
     try {
@@ -17,9 +19,9 @@ const Signin = async (req, res) => {
             details: err.message,
         });
     }
-};
+},
 
-const Login = async (req, res) => {
+Login : async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -29,11 +31,7 @@ const Login = async (req, res) => {
             return res.status(401).json({ message: "Invalid email or password" });
         }
 
-        // Validate the password
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: "Invalid email or password" });
-        }
+       
 
         // Generate a JWT token
         const token = jwt.sign(
@@ -43,7 +41,7 @@ const Login = async (req, res) => {
         );
 
         // Save the token in the user's document
-        user.token = token;
+        user.verifyToken = token;
         await user.save();
 
         // Send the token to the client
@@ -58,5 +56,6 @@ const Login = async (req, res) => {
             details: err.message,
         });
     }
+}
 };
-export default Signin;
+export default auth;
